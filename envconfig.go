@@ -185,6 +185,7 @@ func Process(prefix string, spec interface{}) error {
 	infos, err := gatherInfo(prefix, spec)
 
 	for _, info := range infos {
+		fmt.Println("[DEBUG]info: %+v", info)
 
 		// `os.Getenv` cannot differentiate between an explicitly set empty value
 		// and an unset value. `os.LookupEnv` is preferred to `syscall.Getenv`,
@@ -199,6 +200,7 @@ func Process(prefix string, spec interface{}) error {
 		if def != "" && !ok {
 			value = def
 		}
+		fmt.Println("[DEBUG]default: %s", def)
 
 		req := info.Tags.Get("required")
 		if !ok && def == "" {
