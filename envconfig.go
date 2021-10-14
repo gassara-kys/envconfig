@@ -185,8 +185,6 @@ func Process(prefix string, spec interface{}) error {
 	infos, err := gatherInfo(prefix, spec)
 
 	for _, info := range infos {
-		fmt.Println(fmt.Sprintf("[DEBUG]info: %+v", info))
-
 		// `os.Getenv` cannot differentiate between an explicitly set empty value
 		// and an unset value. `os.LookupEnv` is preferred to `syscall.Getenv`,
 		// but it is only available in go1.5 or newer. We're using Go build tags
@@ -195,13 +193,11 @@ func Process(prefix string, spec interface{}) error {
 		if !ok && info.Alt != "" {
 			value, ok = lookupEnv(info.Alt)
 		}
-		fmt.Println(fmt.Sprintf("[DEBUG]key:%s, alt:%s, value:%s, ok:%t", info.Key, info.Alt, value, ok))
 
 		def := info.Tags.Get("default")
-		if def != "" && !ok {
+		if def != "" && value == "" {
 			value = def
 		}
-		fmt.Println(fmt.Sprintf("[DEBUG]default:%s, defaultValue: %s", def, value))
 
 		req := info.Tags.Get("required")
 		if !ok && def == "" {
